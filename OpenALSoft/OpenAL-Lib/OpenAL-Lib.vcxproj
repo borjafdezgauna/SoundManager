@@ -20,18 +20,18 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{A57F9D62-1D00-4D1C-A5C3-BB3710EDD95B}</ProjectGuid>
+    <ProjectGuid>{BEA9AFE4-C925-4E0E-B50D-1F0E45B43D08}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>SoundManager</RootNamespace>
+    <RootNamespace>OpenAL-Lib</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
-    <ProjectName>SoundManager</ProjectName>
+    <ProjectName>OpenAL</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
@@ -71,10 +71,10 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -83,6 +83,31 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>
+      </SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;AL_LIBTYPE_STATIC;AL_ALEXT_PROTOTYPES;restrict=;strcasecmp=_stricmp;strncasecmp=_strnicmp;HAVE_STRUCT_TIMESPEC;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>false</ConformanceMode>
+      <AdditionalIncludeDirectories>../Alc/backends;../OpenAL32/include;../common;../OpenAL-Lib;../;../include;../Alc;.</AdditionalIncludeDirectories>
+      <RemoveUnreferencedCodeData>true</RemoveUnreferencedCodeData>
+      <SupportJustMyCode>false</SupportJustMyCode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+    </ProjectReference>
+    <Lib>
+      <TargetMachine>MachineX86</TargetMachine>
+      <AdditionalDependencies>winmm.lib</AdditionalDependencies>
+    </Lib>
+  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
@@ -96,28 +121,8 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
-    <ProjectReference>
-      <LinkLibraryDependencies>false</LinkLibraryDependencies>
-    </ProjectReference>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <ClCompile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <WarningLevel>Level3</WarningLevel>
-      <Optimization>Disabled</Optimization>
-      <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;AL_LIBTYPE_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
-    </ClCompile>
-    <Link>
-      <SubSystem>Windows</SubSystem>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-    </Link>
-    <ProjectReference>
-      <LinkLibraryDependencies>true</LinkLibraryDependencies>
-    </ProjectReference>
     <Lib>
-      <TargetMachine>MachineX86</TargetMachine>
+      <TargetMachine>MachineX64</TargetMachine>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -137,9 +142,6 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
-    <ProjectReference>
-      <LinkLibraryDependencies>false</LinkLibraryDependencies>
-    </ProjectReference>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -158,35 +160,95 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
-    <ProjectReference>
-      <LinkLibraryDependencies>false</LinkLibraryDependencies>
-    </ProjectReference>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="AudioFile.h" />
-    <ClInclude Include="AudioObject.h" />
-    <ClInclude Include="SoundManager.h" />
-    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="..\Alc\alconfig.h" />
+    <ClInclude Include="..\Alc\alstring.h" />
+    <ClInclude Include="..\Alc\ambdec.h" />
+    <ClInclude Include="..\Alc\backends\base.h" />
+    <ClInclude Include="..\Alc\bformatdec.h" />
+    <ClInclude Include="..\Alc\compat.h" />
+    <ClInclude Include="..\Alc\converter.h" />
+    <ClInclude Include="..\Alc\cpu_caps.h" />
+    <ClInclude Include="..\Alc\filters\defs.h" />
+    <ClInclude Include="..\Alc\filters\nfc.h" />
+    <ClInclude Include="..\Alc\filters\splitter.h" />
+    <ClInclude Include="..\Alc\fpu_modes.h" />
+    <ClInclude Include="..\Alc\hrtf.h" />
+    <ClInclude Include="..\Alc\inprogext.h" />
+    <ClInclude Include="..\Alc\logging.h" />
+    <ClInclude Include="..\Alc\mastering.h" />
+    <ClInclude Include="..\Alc\mixer\defs.h" />
+    <ClInclude Include="..\Alc\polymorphism.h" />
+    <ClInclude Include="..\Alc\ringbuffer.h" />
+    <ClInclude Include="..\Alc\uhjfilter.h" />
+    <ClInclude Include="..\Alc\vector.h" />
+    <ClInclude Include="..\OpenAL32\Include\alAuxEffectSlot.h" />
+    <ClInclude Include="..\OpenAL32\Include\alBuffer.h" />
+    <ClInclude Include="..\OpenAL32\Include\alEffect.h" />
+    <ClInclude Include="..\OpenAL32\Include\alError.h" />
+    <ClInclude Include="..\OpenAL32\Include\alFilter.h" />
+    <ClInclude Include="..\OpenAL32\Include\alListener.h" />
+    <ClInclude Include="..\OpenAL32\Include\alMain.h" />
+    <ClInclude Include="..\OpenAL32\Include\alSource.h" />
+    <ClInclude Include="..\OpenAL32\Include\alu.h" />
+    <ClInclude Include="..\OpenAL32\Include\bs2b.h" />
+    <ClInclude Include="..\OpenAL32\Include\sample_cvt.h" />
+    <ClInclude Include="config.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AudioFile.cpp" />
-    <ClCompile Include="AudioObject.cpp" />
-    <ClCompile Include="SoundManager.cpp" />
-    <ClCompile Include="stdafx.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\OpenALSoft\common.vcxproj">
-      <Project>{58542a51-baf7-388c-931a-e80ab0e672b7}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\OpenALSoft\OpenAL-Lib\OpenAL-Lib.vcxproj">
-      <Project>{bea9afe4-c925-4e0e-b50d-1f0e45b43d08}</Project>
-    </ProjectReference>
+    <ClCompile Include="..\Alc\ALc.c" />
+    <ClCompile Include="..\Alc\alconfig.c" />
+    <ClCompile Include="..\Alc\ALu.c" />
+    <ClCompile Include="..\Alc\ambdec.c" />
+    <ClCompile Include="..\Alc\backends\base.c" />
+    <ClCompile Include="..\Alc\backends\loopback.c" />
+    <ClCompile Include="..\Alc\backends\null.c" />
+    <ClCompile Include="..\Alc\backends\wasapi.c" />
+    <ClCompile Include="..\Alc\backends\wave.c" />
+    <ClCompile Include="..\Alc\backends\winmm.c" />
+    <ClCompile Include="..\Alc\bformatdec.c" />
+    <ClCompile Include="..\Alc\bs2b.c" />
+    <ClCompile Include="..\Alc\converter.c" />
+    <ClCompile Include="..\Alc\effects\autowah.c" />
+    <ClCompile Include="..\Alc\effects\chorus.c" />
+    <ClCompile Include="..\Alc\effects\compressor.c" />
+    <ClCompile Include="..\Alc\effects\dedicated.c" />
+    <ClCompile Include="..\Alc\effects\distortion.c" />
+    <ClCompile Include="..\Alc\effects\echo.c" />
+    <ClCompile Include="..\Alc\effects\equalizer.c" />
+    <ClCompile Include="..\Alc\effects\fshifter.c" />
+    <ClCompile Include="..\Alc\effects\modulator.c" />
+    <ClCompile Include="..\Alc\effects\null-fx.c" />
+    <ClCompile Include="..\Alc\effects\pshifter.c" />
+    <ClCompile Include="..\Alc\effects\reverb.c" />
+    <ClCompile Include="..\Alc\filters\filter.c" />
+    <ClCompile Include="..\Alc\filters\nfc.c" />
+    <ClCompile Include="..\Alc\filters\splitter.c" />
+    <ClCompile Include="..\Alc\helpers.c" />
+    <ClCompile Include="..\Alc\hrtf.c" />
+    <ClCompile Include="..\Alc\mastering.c" />
+    <ClCompile Include="..\Alc\mixer\mixer_c.c" />
+    <ClCompile Include="..\Alc\mixer\mixer_sse.c" />
+    <ClCompile Include="..\Alc\mixer\mixer_sse2.c" />
+    <ClCompile Include="..\Alc\mixer\mixer_sse3.c" />
+    <ClCompile Include="..\Alc\mixer\mixer_sse41.c" />
+    <ClCompile Include="..\Alc\mixvoice.c" />
+    <ClCompile Include="..\Alc\panning.c" />
+    <ClCompile Include="..\Alc\ringbuffer.c" />
+    <ClCompile Include="..\Alc\uhjfilter.c" />
+    <ClCompile Include="..\OpenAL32\alAuxEffectSlot.c" />
+    <ClCompile Include="..\OpenAL32\alBuffer.c" />
+    <ClCompile Include="..\OpenAL32\alEffect.c" />
+    <ClCompile Include="..\OpenAL32\alError.c" />
+    <ClCompile Include="..\OpenAL32\alExtension.c" />
+    <ClCompile Include="..\OpenAL32\alFilter.c" />
+    <ClCompile Include="..\OpenAL32\alListener.c" />
+    <ClCompile Include="..\OpenAL32\alSource.c" />
+    <ClCompile Include="..\OpenAL32\alState.c" />
+    <ClCompile Include="..\OpenAL32\event.c" />
+    <ClCompile Include="..\OpenAL32\sample_cvt.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
