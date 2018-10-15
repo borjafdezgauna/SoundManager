@@ -5,9 +5,12 @@
 #include "../OpenALSoft/include/AL/al.h"
 #include "../OpenALSoft/include/AL/alc.h"
 
+SoundManager* SoundManager::m_pInstance = nullptr;
 
 SoundManager::SoundManager()
 {
+	m_pInstance = this;
+
 	m_device = alcOpenDevice(NULL);
 	if (!m_device)
 		return;
@@ -23,12 +26,29 @@ SoundManager::SoundManager()
 	alListener3f(AL_VELOCITY, 0, 0, 0);
 	alListenerfv(AL_ORIENTATION, listenerOri);
 
+	//create source pool
+	alGenSources(NUM_MAX_SOURCES, m_soundSources);
+	for (size_t i = 0; i < NUM_MAX_SOURCES; i++)
+		m_freeSoundSources.push_back(m_soundSources[i]);
+
 	m_bInitialized = true;
 }
 
 
 SoundManager::~SoundManager()
 {
+	//make sure to stop all sources before freeing them
+	int source_state;
+	for (unsigned int sourceId = 0; sourceId < NUM_MAX_SOURCES; sourceId++)
+	{
+		alGetSourcei(m_soundSources[sourceId], AL_SOURCE_STATE, &source_state);
+
+		if (source_state == AL_PLAYING)
+			alSourceStop(sourceId);
+
+		alDeleteSources(1, &m_soundSources[sourceId]);
+	}
+
 	for (size_t i = 0; i < m_audioObjects.size(); i++)
 		delete m_audioObjects[i];
 
@@ -70,4 +90,50 @@ void SoundManager::play(int audioObjectId, double x= 0, double y= 0, double z= 0
 	m_audioObjects[audioObjectId]->play(x,y,z,gain);
 
 	int error= alGetError();
+}
+
+unsigned int SoundManager::getFirstFreeSoundSource()
+{
+	if (m_freeSoundSources.size() > 0)
+	{
+		//there are free sources
+		unsigned int source = m_freeSoundSources.front();
+		m_freeSoundSources.pop_front();
+		m_busySoundSources.push_back(source);
+		return source;
+	}
+	return 0;
+}
+
+unsigned int SoundManager::getSoundSource()
+{
+	cout << "Sound source requested: " << m_freeSoundSources.size() << " free and " << m_busySoundSources.size() << " busy\n";
+
+	unsigned int firstFree = getFirstFreeSoundSource();
+	if (firstFree > 0)
+		return firstFree;
+
+	//check the state of all the sources
+	auto it = m_busySoundSources.begin();
+	while (it!=m_busySoundSources.end())
+	{
+		int source_state;
+		alGetSourcei((*it), AL_SOURCE_STATE, &source_state);
+		if (source_state == AL_STOPPED)
+		{
+			//move from busy to free
+			m_freeSoundSources.push_back(*it);
+			it= m_busySoundSources.erase(it);
+		}
+		else it++;
+	}
+	firstFree = getFirstFreeSoundSource();
+	if (firstFree > 0)
+		return firstFree;
+
+	//no free sources, need to free one
+	//for now, the first
+	unsigned int freedSource = m_busySoundSources.front();
+	alSourceStop(freedSource);
+	return freedSource;
 }

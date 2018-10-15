@@ -1,6 +1,6 @@
 #include "AudioObject.h"
 #include "../OpenALSoft/include/AL/al.h"
-
+#include "SoundManager.h"
 
 AudioObject::AudioObject(string filename)
 {
@@ -10,16 +10,6 @@ AudioObject::AudioObject(string filename)
 
 	if (m_bLoaded)
 	{
-		//create audio object and set basic properties
-		alGenSources((ALuint)1, &m_id);
-		alSourcef(m_id, AL_PITCH, 1);
-		alSourcef(m_id, AL_GAIN, 1);
-		alSource3f(m_id, AL_POSITION, 0, 0, 0);
-		alSource3f(m_id, AL_VELOCITY, 0, 0, 0);
-		alSourcei(m_id, AL_LOOPING, AL_FALSE);
-
-
-
 		//format
 		unsigned int format;
 		double minSample,sampleWidth;
@@ -65,8 +55,6 @@ AudioObject::AudioObject(string filename)
 		alGenBuffers((ALuint)1, &m_buffer);
 		alBufferData(m_buffer, format, pData, audioDataSize, audioFile.getSampleRate());
 		
-		//bind source and buffer
-		alSourcei(m_id, AL_BUFFER, m_buffer);
 		delete [] pData;
 	}
 }
@@ -74,14 +62,6 @@ AudioObject::AudioObject(string filename)
 
 AudioObject::~AudioObject()
 {
-	int source_state;
-	alGetSourcei(m_id, AL_SOURCE_STATE, &source_state);
-
-	while (source_state == AL_PLAYING)
-	{
-		alGetSourcei(m_id, AL_SOURCE_STATE, &source_state);
-	}
-	alDeleteSources(1, &m_id);
 	alDeleteBuffers(1, &m_buffer);
 }
 
@@ -90,20 +70,20 @@ string AudioObject::getSourceFilename()
 	return m_sourceFilename;
 }
 
-unsigned int AudioObject::getId()
-{
-	return m_id;
-}
 
 void AudioObject::play(double x, double y, double z, double gain)
 {
-	int source_state;
-	alGetSourcei(m_id, AL_SOURCE_STATE, &source_state);
+	unsigned int soundSource = SoundManager::getInstance()->getSoundSource();
 
-	//if (source_state == AL_)
-	{
-		alSource3f(m_id, AL_POSITION, (float)x, (float)y, (float)z);
-		alSourcef(m_id, AL_GAIN, (float)gain);
-		alSourcePlay(m_id);
-	}
+	//create audio object and set basic properties
+	alSourcef(soundSource, AL_PITCH, 1);
+	alSourcef(soundSource, AL_GAIN,(float)gain);
+	alSource3f(soundSource, AL_POSITION, (float)x, (float)y, (float)z);
+	alSource3f(soundSource, AL_VELOCITY, 0, 0, 0);
+	alSourcei(soundSource, AL_LOOPING, AL_FALSE);
+
+	//bind source and buffer
+	alSourcei(soundSource, AL_BUFFER, m_buffer);
+
+	alSourcePlay(soundSource);
 }
