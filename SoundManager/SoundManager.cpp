@@ -69,7 +69,7 @@ int SoundManager::createAudioObject(string filename)
 
 	m_audioObjects.push_back(pNewAudioObject);
 
-	return m_audioObjects.size()-1;
+	return (int) (m_audioObjects.size()-1);
 }
 
 int SoundManager::getAudioObjectId(string filename)
@@ -77,7 +77,7 @@ int SoundManager::getAudioObjectId(string filename)
 	for (size_t i = 0; i < m_audioObjects.size(); i++)
 	{
 		if (m_audioObjects[i]->getSourceFilename() == filename)
-			return i;
+			return (int) i;
 	}
 	return -1;
 }

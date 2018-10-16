@@ -1149,7 +1149,7 @@ static ALCboolean ALCwasapiPlayback_start(ALCwasapiPlayback *self)
 static HRESULT ALCwasapiPlayback_startProxy(ALCwasapiPlayback *self)
 {
     HRESULT hr;
-    void *ptr;
+    void *ptr= 0;
 
     ResetEvent(self->NotifyEvent);
     hr = IAudioClient_Start(self->client);

@@ -203,7 +203,7 @@
 #define HAVE__CONTROLFP
 
 /* Define if we have __control87_2() */
-#define HAVE___CONTROL87_2
+/*#define HAVE___CONTROL87_2*/
 
 /* Define if we have pthread_setschedparam() */
 /* #undef HAVE_PTHREAD_SETSCHEDPARAM */
