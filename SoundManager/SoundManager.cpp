@@ -39,14 +39,14 @@ SoundManager::~SoundManager()
 {
 	//make sure to stop all sources before freeing them
 	int source_state;
-	for (unsigned int sourceId = 0; sourceId < NUM_MAX_SOURCES; sourceId++)
+	for (size_t i = 0; i < NUM_MAX_SOURCES; i++)
 	{
-		alGetSourcei(m_soundSources[sourceId], AL_SOURCE_STATE, &source_state);
+		alGetSourcei(m_soundSources[i], AL_SOURCE_STATE, &source_state);
 
 		if (source_state == AL_PLAYING)
-			alSourceStop(sourceId);
+			alSourceStop(m_soundSources[i]);
 
-		alDeleteSources(1, &m_soundSources[sourceId]);
+		alDeleteSources(1, &m_soundSources[i]);
 	}
 
 	for (size_t i = 0; i < m_audioObjects.size(); i++)
@@ -82,12 +82,12 @@ int SoundManager::getAudioObjectId(string filename)
 	return -1;
 }
 
-void SoundManager::play(int audioObjectId, double x= 0, double y= 0, double z= 0, double gain= 1.0)
+void SoundManager::play(int audioObjectId, float gain, float x, float y, float z, float dirX, float dirY, float dirZ)
 {
 	if (audioObjectId<0 || (size_t)audioObjectId>m_audioObjects.size())
 		return;
 
-	m_audioObjects[audioObjectId]->play(x,y,z,gain);
+	m_audioObjects[audioObjectId]->play( gain, x, y, z, dirX, dirY, dirZ);
 
 	int error= alGetError();
 }
@@ -107,7 +107,8 @@ unsigned int SoundManager::getFirstFreeSoundSource()
 
 unsigned int SoundManager::getSoundSource()
 {
-	cout << "Sound source requested: " << m_freeSoundSources.size() << " free and " << m_busySoundSources.size() << " busy\n";
+	if (getVerbose())
+		cout << "Sound source requested: " << m_freeSoundSources.size() << " free and " << m_busySoundSources.size() << " busy\n";
 
 	unsigned int firstFree = getFirstFreeSoundSource();
 	if (firstFree > 0)

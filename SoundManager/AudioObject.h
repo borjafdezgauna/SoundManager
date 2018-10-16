@@ -18,6 +18,6 @@ public:
 
 	string getSourceFilename();
 
-	void play(double x, double y, double z, double gain);
+	void play(float gain, float x, float y, float z, float dirX, float dirY, float dirZ);
 };
 

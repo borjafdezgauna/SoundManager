@@ -23,16 +23,22 @@ class SoundManager
 	void *m_context;
 
 	unsigned int getFirstFreeSoundSource();
+
+	bool m_bVerbose = false;
 public:
 	SoundManager();
 	virtual ~SoundManager();
 
+	void setVerbose(bool verbose) { m_bVerbose = verbose; }
+	bool getVerbose() { return m_bVerbose; }
+
+	//Used from any client
 	int getAudioObjectId(string filename);
-
 	int createAudioObject(string filename);
+	void play(int audioObjectId, float gain= 1.f, float x= 0.f, float y= 0.f, float z= 0.f
+		, float dirX= 0.f, float dirY= 0.f, float dirZ= 0.f);
 
-	void play(int audioObjectId, double x, double y, double z, double gain);
-
+	//Used from AudioObject
 	unsigned int getSoundSource();
 
 	static SoundManager* getInstance() { return m_pInstance; }

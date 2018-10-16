@@ -4,6 +4,9 @@
 
 AudioObject::AudioObject(string filename)
 {
+	if (SoundManager::getInstance()->getVerbose())
+		cout << "Loading audio file: " << filename << "\n";
+
 	AudioFile<float> audioFile;
 	m_bLoaded= audioFile.load(filename);
 	m_sourceFilename = filename;
@@ -71,15 +74,18 @@ string AudioObject::getSourceFilename()
 }
 
 
-void AudioObject::play(double x, double y, double z, double gain)
+void AudioObject::play(float gain, float x, float y, float z, float dirX, float dirY, float dirZ)
 {
+	if (SoundManager::getInstance()->getVerbose())
+		cout << "Playing audio: " << m_sourceFilename << "\n";
+
 	unsigned int soundSource = SoundManager::getInstance()->getSoundSource();
 
 	//create audio object and set basic properties
 	alSourcef(soundSource, AL_PITCH, 1);
-	alSourcef(soundSource, AL_GAIN,(float)gain);
-	alSource3f(soundSource, AL_POSITION, (float)x, (float)y, (float)z);
-	alSource3f(soundSource, AL_VELOCITY, 0, 0, 0);
+	alSourcef(soundSource, AL_GAIN, gain);
+	alSource3f(soundSource, AL_POSITION, x, y, z);
+	alSource3f(soundSource, AL_VELOCITY, dirX, dirY, dirZ);
 	alSourcei(soundSource, AL_LOOPING, AL_FALSE);
 
 	//bind source and buffer
