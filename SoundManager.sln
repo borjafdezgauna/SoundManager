@@ -3,15 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2026
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SoundManager", "SoundManager\SoundManager.vcxproj", "{A57F9D62-1D00-4D1C-A5C3-BB3710EDD95B}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SoundManager-Lib", "SoundManager\SoundManager.vcxproj", "{A57F9D62-1D00-4D1C-A5C3-BB3710EDD95B}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OpenAL", "OpenALSoft\OpenAL-Lib\OpenAL-Lib.vcxproj", "{BEA9AFE4-C925-4E0E-B50D-1F0E45B43D08}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SoundManagerTest", "SoundManagerTest\SoundManagerTest.vcxproj", "{259160A4-C7E9-42BF-BE75-3C4D6BBA5D1B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3rd-party", "3rd-party", "{E9D16B45-ED45-461B-9F04-90921E6561B3}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "common", "OpenALSoft\OpenAL-Lib\common.vcxproj", "{58542A51-BAF7-388C-931A-E80AB0E672B7}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test", "test\test.vcxproj", "{259160A4-C7E9-42BF-BE75-3C4D6BBA5D1B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{8EEEE325-E5D8-4759-89DF-51B0C47105B3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,14 +39,6 @@ Global
 		{BEA9AFE4-C925-4E0E-B50D-1F0E45B43D08}.Release|x64.Build.0 = Release|x64
 		{BEA9AFE4-C925-4E0E-B50D-1F0E45B43D08}.Release|x86.ActiveCfg = Release|Win32
 		{BEA9AFE4-C925-4E0E-B50D-1F0E45B43D08}.Release|x86.Build.0 = Release|Win32
-		{259160A4-C7E9-42BF-BE75-3C4D6BBA5D1B}.Debug|x64.ActiveCfg = Debug|x64
-		{259160A4-C7E9-42BF-BE75-3C4D6BBA5D1B}.Debug|x64.Build.0 = Debug|x64
-		{259160A4-C7E9-42BF-BE75-3C4D6BBA5D1B}.Debug|x86.ActiveCfg = Debug|Win32
-		{259160A4-C7E9-42BF-BE75-3C4D6BBA5D1B}.Debug|x86.Build.0 = Debug|Win32
-		{259160A4-C7E9-42BF-BE75-3C4D6BBA5D1B}.Release|x64.ActiveCfg = Release|x64
-		{259160A4-C7E9-42BF-BE75-3C4D6BBA5D1B}.Release|x64.Build.0 = Release|x64
-		{259160A4-C7E9-42BF-BE75-3C4D6BBA5D1B}.Release|x86.ActiveCfg = Release|Win32
-		{259160A4-C7E9-42BF-BE75-3C4D6BBA5D1B}.Release|x86.Build.0 = Release|Win32
 		{58542A51-BAF7-388C-931A-E80AB0E672B7}.Debug|x64.ActiveCfg = Debug|x64
 		{58542A51-BAF7-388C-931A-E80AB0E672B7}.Debug|x64.Build.0 = Debug|x64
 		{58542A51-BAF7-388C-931A-E80AB0E672B7}.Debug|x86.ActiveCfg = Debug|Win32
@@ -53,6 +47,14 @@ Global
 		{58542A51-BAF7-388C-931A-E80AB0E672B7}.Release|x64.Build.0 = Release|x64
 		{58542A51-BAF7-388C-931A-E80AB0E672B7}.Release|x86.ActiveCfg = Release|Win32
 		{58542A51-BAF7-388C-931A-E80AB0E672B7}.Release|x86.Build.0 = Release|Win32
+		{259160A4-C7E9-42BF-BE75-3C4D6BBA5D1B}.Debug|x64.ActiveCfg = Debug|x64
+		{259160A4-C7E9-42BF-BE75-3C4D6BBA5D1B}.Debug|x64.Build.0 = Debug|x64
+		{259160A4-C7E9-42BF-BE75-3C4D6BBA5D1B}.Debug|x86.ActiveCfg = Debug|Win32
+		{259160A4-C7E9-42BF-BE75-3C4D6BBA5D1B}.Debug|x86.Build.0 = Debug|Win32
+		{259160A4-C7E9-42BF-BE75-3C4D6BBA5D1B}.Release|x64.ActiveCfg = Release|x64
+		{259160A4-C7E9-42BF-BE75-3C4D6BBA5D1B}.Release|x64.Build.0 = Release|x64
+		{259160A4-C7E9-42BF-BE75-3C4D6BBA5D1B}.Release|x86.ActiveCfg = Release|Win32
+		{259160A4-C7E9-42BF-BE75-3C4D6BBA5D1B}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -60,6 +62,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{BEA9AFE4-C925-4E0E-B50D-1F0E45B43D08} = {E9D16B45-ED45-461B-9F04-90921E6561B3}
 		{58542A51-BAF7-388C-931A-E80AB0E672B7} = {E9D16B45-ED45-461B-9F04-90921E6561B3}
+		{259160A4-C7E9-42BF-BE75-3C4D6BBA5D1B} = {8EEEE325-E5D8-4759-89DF-51B0C47105B3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {11184049-5E64-4E96-B1FF-EE65B8EE4D40}
