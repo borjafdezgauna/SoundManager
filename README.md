@@ -26,7 +26,7 @@ There is an example project you can use as reference: test/test.vcxproj
 SoundManager soundManager;
 ```
 
-2. Access the sound manager (if not defined in the same file) and create all the audio objects required in your program:
+2. Access the sound manager (if not defined in the same file) and load all the audio files required in your program. Loading is done on the same thread, so it's best to load all the files before starting the main loop:
 
 ```
 SoundManager* pSoundManager= SoundManager::getInstance();
@@ -35,7 +35,7 @@ pSoundManager->createAudioObject("../snd/audiofile-02.wav");
 ...
 ```
 
-3. Play audio objects:
+3. Play audio objects. They will automatically be played by a different thread, so that the main thread is not blocked:
 
 ```
 int audioObjId= pSoundManager->getAudioObjectId("../snd/audiofile-01.wav");
