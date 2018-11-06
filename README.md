@@ -30,16 +30,15 @@ SoundManager soundManager;
 
 ```
 SoundManager* pSoundManager= SoundManager::getInstance();
-pSoundManager->createAudioObject("../snd/audiofile-01.wav");
-pSoundManager->createAudioObject("../snd/audiofile-02.wav");
+pSoundManager->load("../snd/audiofile-01.wav");
+pSoundManager->load("../snd/audiofile-02.wav");
 ...
 ```
 
 3. Play audio objects. They will automatically be played by a different thread, so that the main thread is not blocked:
 
 ```
-int audioObjId= pSoundManager->getAudioObjectId("../snd/audiofile-01.wav");
-pSoundManager->play(audioObjId, GAIN, POS_X, POS_Y, POS_Z, DIR_X, DIR_Y, DIR_Z);
+pSoundManager->play("../snd/audiofile-01.wav", GAIN, POS_X, POS_Y, POS_Z, DIR_X, DIR_Y, DIR_Z);
 ```
 
 4. All resources are automatically freed when the sound manager object is destroyed. If you created the SoundManager using _new_, call _delete_ on the pointer. Otherwise, no need to do anything
