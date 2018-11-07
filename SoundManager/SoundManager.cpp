@@ -15,7 +15,6 @@ SoundManager::SoundManager()
 	if (!m_device)
 		return;
 
-
 	m_context = alcCreateContext((ALCdevice*)m_device, NULL);
 	if (!alcMakeContextCurrent((ALCcontext*)m_context))
 		return;
@@ -37,6 +36,9 @@ SoundManager::SoundManager()
 
 SoundManager::~SoundManager()
 {
+	if (!m_bInitialized)
+		return;
+
 	//make sure to stop all sources before freeing them
 	int source_state;
 	for (size_t i = 0; i < NUM_MAX_SOURCES; i++)
@@ -49,49 +51,69 @@ SoundManager::~SoundManager()
 		alDeleteSources(1, &m_soundSources[i]);
 	}
 
-	for (size_t i = 0; i < m_audioObjects.size(); i++)
-		delete m_audioObjects[i];
-
 	m_device = alcGetContextsDevice((ALCcontext*)m_context);
 	alcMakeContextCurrent(NULL);
 	alcDestroyContext((ALCcontext*)m_context);
 	alcCloseDevice((ALCdevice*)m_device);
 }
 
-int SoundManager::createAudioObject(string filename)
+AudioObject* SoundManager::load(string filename)
 {
-	int audioId = getAudioObjectId(filename);
+	if (!m_bInitialized)
+		return nullptr;
 
-	if (audioId >= 0)
-		return audioId;
+	AudioObject* pAudioObj = getAudioObject(filename);
 
-	AudioObject* pNewAudioObject= new AudioObject(filename);
+	if (pAudioObj != nullptr)
+		return pAudioObj;
 
-	m_audioObjects.push_back(pNewAudioObject);
+	AudioObject* newAudioObj= new AudioObject(filename);
 
-	return (int) (m_audioObjects.size()-1);
+	m_audioObjects[filename] = newAudioObj;
+
+	return m_audioObjects[filename];
 }
 
-int SoundManager::getAudioObjectId(string filename)
+AudioObject* SoundManager::getAudioObject(string filename)
 {
-	for (size_t i = 0; i < m_audioObjects.size(); i++)
-	{
-		if (m_audioObjects[i]->getSourceFilename() == filename)
-			return (int) i;
-	}
-	return -1;
+	if (!m_bInitialized)
+		return nullptr;
+
+	auto it = m_audioObjects.find(filename);
+	if (it != m_audioObjects.end())
+		return it->second;
+
+	return nullptr;
 }
 
-void SoundManager::play(int audioObjectId, float gain, float x, float y, float z, float dirX, float dirY, float dirZ)
+void SoundManager::play(string filename, float gain, float x, float y, float z, float dirX, float dirY, float dirZ)
 {
-	if (audioObjectId<0 || (size_t)audioObjectId>m_audioObjects.size())
+	if (!m_bInitialized)
 		return;
 
-	m_audioObjects[audioObjectId]->play( gain, x, y, z, dirX, dirY, dirZ);
+	if ( filename.empty())
+		return;
 
-	int error= alGetError();
+	AudioObject* pAudioObj = getAudioObject(filename);
+
+	if (pAudioObj != nullptr)
+		pAudioObj->play( gain, x, y, z, dirX, dirY, dirZ);
 }
 
+void SoundManager::play(AudioObject* pAudioObj, float gain, float x, float y, float z , float dirX, float dirY, float dirZ)
+{
+	if (!m_bInitialized)
+		return;
+
+	if (pAudioObj == nullptr)
+	{
+		if (m_bVerbose)
+			cout << "ERROR: Null pointer passed to SoundManager::play()\n";
+		return;
+	}
+
+	pAudioObj->play(gain, x, y, z, dirX, dirY, dirZ);
+}
 unsigned int SoundManager::getFirstFreeSoundSource()
 {
 	if (m_freeSoundSources.size() > 0)
@@ -107,6 +129,9 @@ unsigned int SoundManager::getFirstFreeSoundSource()
 
 unsigned int SoundManager::getSoundSource()
 {
+	if (!m_bInitialized)
+		return 0;
+
 	if (getVerbose())
 		cout << "Sound source requested: " << m_freeSoundSources.size() << " free and " << m_busySoundSources.size() << " busy\n";
 
